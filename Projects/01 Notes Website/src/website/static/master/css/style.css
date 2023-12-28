@@ -1,0 +1,36 @@
+html, body {
+    font-family: Arial, "Times New Roman", Helvetica, sans-serif;
+}
+
+body {
+    margin: 0, 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+}
+
+footer {
+    margin-top: auto;
+    background-color: #1c64ff;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding: auto;
+}
+
+h1 {
+    color: rgb(22, 0, 119);
+}
+
+h1 a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+.private {
+    color: #ff0101;
+}
+
+.public {
+    color: #0af406;
+}

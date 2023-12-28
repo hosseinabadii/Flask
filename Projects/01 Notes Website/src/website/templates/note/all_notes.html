@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %} Notes {% endblock %}
+
+{% block content %}
+<h2>Your Notes</h2>
+
+<ul class="list-group" id="notes">
+    {% if current_user.notes %}
+    {% for note in current_user.notes %}
+    <li class="list-group-item">
+        <div class="d-flex justify-content-between">
+            <div>
+                {% if note.is_public %}
+                <span class="badge bg-success me-1">Public</span>
+                {% else %}
+                <span class="badge bg-dark me-1">Private</span>
+                {% endif %}
+                <span class="note-date">{{ note.date }}</span>
+            </div>
+            <div>
+                <button class="btn btn-primary btn-sm" type="button" data-placement="top" title="Edit" onclick="editNote('{{ note.id }}')"><i class="fa fa-edit"></i></button>
+                <button class="btn btn-danger btn-sm" type="button" data-placement="top" title="Delete" onclick="deleteNote('{{ note.id }}')"><i class="fa fa-trash"></i></button>
+            </div>
+        </div>
+        <p class="mt-2">{{ note.text }}</p>
+    </li>
+    {% endfor %}
+    {% else %}
+    <p>You don't have any notes yet.</p>
+    {% endif %}
+</ul>
+{% endblock %}
+

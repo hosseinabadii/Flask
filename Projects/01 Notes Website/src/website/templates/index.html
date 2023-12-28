@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %} Index {% endblock %}
+
+{% block content %}
+<h1>Notes Website</h1>
+
+{% if not current_user.is_authenticated %}
+<p><strong>Test Email Address</strong>: admin@admin.com</p>
+<p><strong>Test Password</strong>: aaaa</p>
+{% endif %}
+
+{% if public_notes %}
+<ul class="list-group" id="notes">
+    {% for note in public_notes %}
+    <li class="list-group-item">
+        <div class="d-flex justify-content-between">
+            <div>
+                <span class="badge bg-success me-1">{{ note.user.first_name }}</span>
+            </div>
+            <div>
+                <span class="badge bg-dark me-1">{{ note.date }}</span>
+            </div>
+        </div>
+        <p class="mt-2">{{ note.text }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+    <p>No public posts available!</p>
+{% endif %}
+
+{% endblock %}

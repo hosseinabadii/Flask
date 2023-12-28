@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %} Add Note {% endblock %}
+
+{% block content %}
+<form method="POST">
+    <div class="mb-3">
+        <textarea name="text" id="text" class="form-control">{% if note %}{{ note.text }}{% endif %}</textarea>
+    </div>
+    <div class="mb-3 form-check">
+        {% if note and note.is_public %}
+        <input class="form-check-input" type="checkbox" value="true" id="isPublic" name="is_public", checked="true">
+        {%  else %}
+        <input class="form-check-input" type="checkbox" value="true" id="isPublic" name="is_public">
+        {% endif %}
+        <label class="form-check-label" for="isPublic">
+            is public
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Edit Note</button>
+</form>
+{% endblock %}
