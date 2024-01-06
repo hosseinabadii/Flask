@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Homepage{% endblock %}
+
+{% block content %}
+{% if posts %}
+{% for post in posts[::-1] %}
+<article class="media content-section">
+  <img class="rounded-circle article-img"
+    src="{{ url_for('users.static', filename='profile_pics/' + post.author.image_file) }}">
+  <div class="media-body">
+    <div class="article-metadata">
+      {% if post.is_public %}
+      <span class="badge bg-success text-white">Public</span>
+      {% else %}
+      <span class="badge bg-dark text-white">Private</span>
+      {% endif %}
+      <small class="text-muted">{{ post.date_posted.strftime("%Y-%m-%d") }}</small>
+    </div>
+    <h2><a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}">{{ post.title }}</a></h2>
+    <p class="article-content">{{ post.content }}</p>
+  </div>
+</article>
+{% endfor %}
+{% else %}
+<h2>You don't have any posts yet. Add a new post.</h2>
+{% endif %}
+{% endblock content %}

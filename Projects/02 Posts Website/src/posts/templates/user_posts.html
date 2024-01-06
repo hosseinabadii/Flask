@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Homepage{% endblock %}
+
+{% block content %}
+{% if posts %}
+{% for post in posts[::-1] %}
+{% if post.is_public %}
+<article class="media content-section">
+  <img class="rounded-circle article-img"
+    src="{{ url_for('users.static', filename='profile_pics/' + post.author.image_file) }}">
+  <div class="media-body">
+    <div class="article-metadata">
+      <small class="text-muted">{{ post.date_posted.strftime("%Y-%m-%d") }}</small>
+    </div>
+    <h2><a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}">{{ post.title }}</a></h2>
+    <p class="article-content">{{ post.content }}</p>
+  </div>
+</article>
+{% endif%}
+{% endfor %}
+{% else %}
+<h2>This user does not have any public posts.</h2>
+{% endif %}
+{% endblock content %}
