@@ -2,52 +2,55 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
-<article class="media content-section">
-  <img class="rounded-circle article-img"
-    src="{{ url_for('users.static', filename='profile_pics/' + post.author.image_file) }}">
-  <div class="media-body">
+<article class="d-flex align-items-center mb-3 p-2 border rounded">
+  <div class="flex-grow-1 ms-3 me-3">
     {% if post.author == current_user %}
-    <div class="article-metadata">
+    <div class="pb-2 mb-2 border-bottom">
       {% if post.is_public %}
-      <span class="badge bg-success text-white">Public</span>
+      <span class="badge bg-success text-white me-2">Public</span>
       {% else %}
-      <span class="badge bg-dark text-white">Private</span>
+      <span class="badge bg-dark text-white me-2">Private</span>
       {% endif %}
-      <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-      <div>
-        <a class="btn btn-secondary btn-sm mt-1 mb-1"
-          href="{{ url_for('posts.update_post', post_id=post.id) }}">Update</a>
-        <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal"
-          data-target="#deleteModal">Delete</button>
-      </div>
+      <small class="text-muted">{{ post.date_posted.strftime("%Y-%m-%d") }}</small>
     </div>
-    <h2 class="article-title">{{ post.title }}</h2>
-    <p class="article-content">{{ post.content }}</p>
+    <h2>{{post.title }}</h2>
+    <p>{{ post.content }}</p>
+    <a class="btn btn-primary btn-sm mt-1 mb-1" href="{{ url_for('posts.update_post', post_id=post.id) }}">Update</a>
+    <button type="button" class="btn btn-danger btn-sm m-1" data-bs-toggle="modal"
+      data-bs-target="#deleteModal">Delete</button>
+
     {% else %}
-    <div class="article-metadata">
-      <a class="mr-2" href="{{ url_for('posts.user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
-      <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+
+    <div class="pb-2 mb-2 border-bottom">
+      <a class="badge bg-primary text-decoration-none me-2 text-white"
+        href="{{ url_for('posts.user_posts', username=post.author.username) }}">{{ post.author.username
+        }}</a>
+      <small class="text-muted">{{ post.date_posted.strftime("%Y-%m-%d") }}</small>
     </div>
-    <h2 class="article-title">{{ post.title }}</h2>
-    <p class="article-content">{% if post.is_public %} {{ post.content }} {% else %} This is a private post! {% endif %}
+    <h2>{{post.title }}</h2>
+    <p>{% if post.is_public %} {{ post.content }} {% else %} This is a private post! {% endif %}
     </p>
+
     {% endif %}
   </div>
+  <div class="flex-shrink-0 m-1">
+    <img class="article-img" src="{{ url_for('posts.static', filename='thumbnails/' + post.image_file) }}">
+  </div>
 </article>
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Delete Post?</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div class="modal-body">Are you sure you want to delete this post?</div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
         <form action="{{ url_for('posts.delete_post', post_id=post.id) }}" method="POST">
           <input class="btn btn-danger" type="submit" value="Delete">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         </form>
       </div>
     </div>

@@ -72,3 +72,21 @@ class UpdateAccountFrom(FlaskForm):
         user = db.session.scalars(select(User).filter_by(email=email.data)).first()
         if user:
             raise ValidationError("That email is taken. Please choose a different one.")
+
+
+class RequestResetForm(FlaskForm):
+    email = StringField("Email", [DataRequired(), Email()])
+    submit = SubmitField("Request Password Reset")
+
+    def validate_email(self, email):
+        user = db.session.scalars(select(User).filter_by(email=email.data)).first()
+        if user is None:
+            raise ValidationError("There is no account with that email.")
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField("Password", [DataRequired()])
+    confirm_password = PasswordField(
+        "Confirm Password", [DataRequired(), EqualTo("password")]
+    )
+    submit = SubmitField("Reset Password")

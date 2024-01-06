@@ -7,7 +7,11 @@ from main.models import Post, User
 from .froms import PostForm
 
 posts = Blueprint(
-    "posts", __name__, static_folder="static", template_folder="templates"
+    "posts",
+    __name__,
+    static_folder="static",
+    static_url_path="/posts/static",
+    template_folder="templates",
 )
 
 

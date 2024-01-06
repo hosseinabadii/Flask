@@ -5,8 +5,19 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from main import services
 from main.models import User
 
-from .forms import LoginFrom, RegistrationFrom, UpdateAccountFrom
-from .utils import save_picture
+from .forms import (
+    LoginFrom,
+    RegistrationFrom,
+    RequestResetForm,
+    ResetPasswordForm,
+    UpdateAccountFrom,
+)
+from .utils import (
+    generate_reset_token,
+    save_picture,
+    send_password_reset_email,
+    verify_reset_token,
+)
 
 users = Blueprint(
     "users",
@@ -77,3 +88,46 @@ def account():
         "users.static", filename=f"profile_pics/{current_user.image_file}"
     )
     return render_template("account.html", image_file=image_file, form=form)
+
+
+@users.route("/reset-password", methods=["GET", "POST"])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for("main.index"))
+
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user_email = form.email.data
+        reset_token = generate_reset_token(user_email)
+        send_password_reset_email(user_email, reset_token)
+        flash(
+            "An email has been sent with instructions to reset your password.", "info"
+        )
+        return redirect(url_for("users.login"))
+    return render_template("reset_request.html", form=form)
+
+
+@users.route("/reset-password/<token>", methods=["GET", "POST"])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for("main.index"))
+
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        email = verify_reset_token(token)
+        if email is None:
+            flash("The password reset link is invalid or has expired.", "danger")
+            return redirect(url_for("users.reset_request"))
+
+        user = services.get_first_filter_by(User, email=email)
+        if not user:
+            flash("No user found with this email address.", "danger")
+            return redirect(url_for("users.reset_request"))
+
+        hashed_password = generate_password_hash(form.password.data)
+        user.password = hashed_password
+        services.update()
+        flash("Your password has been updated!", "success")
+        return redirect(url_for("users.login"))
+
+    return render_template("reset_token.html", form=form)

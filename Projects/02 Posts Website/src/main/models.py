@@ -17,10 +17,11 @@ class User(db.Model, UserMixin):
         String(20), nullable=False, default="default.png"
     )
     password: Mapped[str] = mapped_column(String(60))
+    is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
     posts: Mapped[list["Post"]] = relationship(back_populates="author")
 
     def __repr__(self) -> str:
-        return f"User(id={self.id!r}, username={self.username!r}, email={self.email!r}, image_file={self.image_file!r})"
+        return f"User(id={self.id!r}, username={self.username!r}, email={self.email!r})"
 
 
 class Post(db.Model):
@@ -31,6 +32,9 @@ class Post(db.Model):
     date_posted: Mapped[datetime] = mapped_column(DateTime, default=func.now())
     content: Mapped[str] = mapped_column(Text, nullable=False)
     is_public: Mapped[bool] = mapped_column(Boolean, default=False)
+    image_file: Mapped[str] = mapped_column(
+        String(20), nullable=False, default="default_thumbnail.jpg"
+    )
     author_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     author: Mapped["User"] = relationship(back_populates="posts")
 
