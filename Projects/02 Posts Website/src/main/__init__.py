@@ -23,6 +23,7 @@ def load_user(user_id):
     return db.session.get(User, int(user_id))
 
 
+from errors.handlers import errors
 from main.views import main
 from posts.views import posts
 from users.views import users
@@ -43,5 +44,6 @@ def create_app():
     app.register_blueprint(main, url_prefix="/")
     app.register_blueprint(users, url_prefix="/")
     app.register_blueprint(posts, url_prefix="/post")
+    app.register_blueprint(errors, url_prefix="/error")
 
     return app

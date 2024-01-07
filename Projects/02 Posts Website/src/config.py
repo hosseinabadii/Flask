@@ -1,14 +1,16 @@
-from dotenv import dotenv_values
+import os
 
-config = dotenv_values()
+from dotenv import load_dotenv
+
+load_dotenv(".env")
 
 
 class Config:
-    SECRET_KEY = config.get("SECRET_KEY")
-    SQLALCHEMY_DATABASE_URI = config.get("SQLALCHEMY_DATABASE_URI")
-    SECURITY_PASSWORD_SALT = config.get("SECURITY_PASSWORD_SALT")
-    MAIL_SERVER = config.get("MAIL_SERVER")
-    MAIL_PORT = config.get("MAIL_PORT")
-    MAIL_USE_TLS = config.get("MAIL_USE_TLS")
-    MAIL_USERNAME = config.get("MAIL_USERNAME")
-    MAIL_PASSWORD = config.get("MAIL_PASSWORD")
+    SECRET_KEY = os.getenv("SECRET_KEY")
+    SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
+    SECURITY_PASSWORD_SALT = os.getenv("SECURITY_PASSWORD_SALT")
+    MAIL_SERVER = os.getenv("MAIL_SERVER")
+    MAIL_PORT = os.getenv("MAIL_PORT")
+    MAIL_USE_TLS = os.getenv("MAIL_USE_TLS")
+    MAIL_USERNAME = os.getenv("MAIL_USERNAME")
+    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")

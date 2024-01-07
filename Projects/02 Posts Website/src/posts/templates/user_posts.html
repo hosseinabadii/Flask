@@ -11,7 +11,8 @@
       <span class="badge bg-success text-white me-2">Public</span>
       <small class="text-muted">{{ post.date_posted.strftime("%Y-%m-%d") }}</small>
     </div>
-    <h2>{{post.title }}</h2>
+    <h2><a class="text-dark-emphasis text-decoration-none" href="{{ url_for('posts.post', post_id=post.id) }}">{{
+        post.title }}</a></h2>
     <p>{{ post.content }}</p>
   </div>
   <div class="flex-shrink-0 m-1">

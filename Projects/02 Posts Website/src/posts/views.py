@@ -46,7 +46,6 @@ def post(post_id: int):
 
 
 @posts.route("/<int:post_id>/update", methods=["GET", "POST"])
-@login_required
 def update_post(post_id: int):
     post = services.get_or_404(Post, post_id)
     if post.author != current_user:
@@ -71,7 +70,6 @@ def update_post(post_id: int):
 
 
 @posts.route("/<int:post_id>/delete", methods=["POST"])
-@login_required
 def delete_post(post_id: int):
     post = services.get_or_404(Post, post_id)
     if post.author != current_user:
