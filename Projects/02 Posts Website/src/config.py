@@ -14,3 +14,5 @@ class Config:
     MAIL_USE_TLS = os.getenv("MAIL_USE_TLS")
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+    FLASK_ADMIN_SWATCH = os.getenv("FLASK_ADMIN_SWATCH")
+    FLASK_ADMIN_FLUID_LAYOUT = os.getenv("FLASK_ADMIN_FLUID_LAYOUT")

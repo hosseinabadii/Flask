@@ -1,6 +1,10 @@
 from . import db
 
 
+def get_all(model):
+    return db.session.scalars(db.select(model)).all()
+
+
 def get_all_filter_by(model, **kwargs):
     return db.session.scalars(
         db.select(model).filter_by(**kwargs).order_by(model.id.desc())

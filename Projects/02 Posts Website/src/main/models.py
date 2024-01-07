@@ -33,7 +33,7 @@ class Post(db.Model):
     content: Mapped[str] = mapped_column(Text, nullable=False)
     is_public: Mapped[bool] = mapped_column(Boolean, default=False)
     image_file: Mapped[str] = mapped_column(
-        String(20), nullable=False, default="default_thumbnail.jpg"
+        String(120), nullable=False, default="default_thumbnail.jpg"
     )
     author_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     author: Mapped["User"] = relationship(back_populates="posts")
