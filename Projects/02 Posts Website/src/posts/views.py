@@ -9,9 +9,9 @@ from .froms import PostForm
 posts = Blueprint(
     "posts",
     __name__,
-    static_folder="static",
-    static_url_path="/posts/static",
-    template_folder="templates",
+    # static_folder="static",
+    # static_url_path="/posts/static",
+    # template_folder="templates",
 )
 
 
@@ -30,7 +30,7 @@ def new_post():
         flash("Your post has been created!", "success")
         return redirect(url_for("posts.my_posts"))
     return render_template(
-        "create_update_post.html",
+        "posts/create_update_post.html",
         form=form,
         title="New Post",
         legend="Create a new post",
@@ -42,7 +42,7 @@ def post(post_id: int):
     post = services.get_or_404(Post, post_id)
     if (post.author != current_user) and (post.is_public is False):
         abort(403)
-    return render_template("post.html", post=post)
+    return render_template("posts/post.html", post=post)
 
 
 @posts.route("/<int:post_id>/update", methods=["GET", "POST"])
@@ -62,7 +62,7 @@ def update_post(post_id: int):
     form.content.data = post.content
     form.is_public.data = post.is_public
     return render_template(
-        "create_update_post.html",
+        "posts/create_update_post.html",
         form=form,
         title="Update Post",
         legend="Update the post",
@@ -83,7 +83,7 @@ def delete_post(post_id: int):
 @login_required
 def my_posts():
     posts = current_user.posts
-    return render_template("my_posts.html", posts=posts)
+    return render_template("posts/my_posts.html", posts=posts)
 
 
 @posts.route("/user/<username>")
@@ -91,4 +91,4 @@ def user_posts(username: str):
     user = services.get_first_or_404_filter_by(User, username=username)
     if user == current_user:
         return redirect(url_for("posts.my_posts"))
-    return render_template("user_posts.html", posts=user.posts)
+    return render_template("posts/user_posts.html", posts=user.posts)

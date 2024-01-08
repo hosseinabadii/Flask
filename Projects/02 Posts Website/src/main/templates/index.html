@@ -15,7 +15,7 @@
   </div>
   <div class="flex-shrink-0 m-1">
     <img class="article-img"
-      src="{{ url_for('posts.static', filename='thumbnails/' + post.image_file) }}">
+      src="{{ url_for('static', filename='posts/thumbnails/' + post.image_file) }}">
   </div>
 </article>
 {% endfor %}

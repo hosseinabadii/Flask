@@ -22,9 +22,9 @@ from .utils import (
 users = Blueprint(
     "users",
     __name__,
-    static_folder="static",
-    static_url_path="/users/static",
-    template_folder="templates",
+    # static_folder="static",
+    # static_url_path="/users/static",
+    # template_folder="templates",
 )
 
 
@@ -43,7 +43,7 @@ def register():
         flash("Your account has been created! Now you can login.", "success")
         return redirect(url_for("users.login"))
 
-    return render_template("register.html", form=form)
+    return render_template("users/register.html", form=form)
 
 
 @users.route("/login", methods=["GET", "POST"])
@@ -60,7 +60,7 @@ def login():
             flash("Logged in successfully!", category="success")
             return redirect(next_page or url_for("main.index"))
         flash("Login Unsuccessful. Please check email and password", "danger")
-    return render_template("login.html", form=form)
+    return render_template("users/login.html", form=form)
 
 
 @users.route("/logout")
@@ -85,9 +85,9 @@ def account():
     form.username.data = current_user.username
     form.email.data = current_user.email
     image_file = url_for(
-        "users.static", filename=f"profile_pics/{current_user.image_file}"
+        "static", filename=f"users/profile_pics/{current_user.image_file}"
     )
-    return render_template("account.html", image_file=image_file, form=form)
+    return render_template("users/account.html", image_file=image_file, form=form)
 
 
 @users.route("/reset-password", methods=["GET", "POST"])
@@ -104,7 +104,7 @@ def reset_request():
             "An email has been sent with instructions to reset your password.", "info"
         )
         return redirect(url_for("users.login"))
-    return render_template("reset_request.html", form=form)
+    return render_template("users/reset_request.html", form=form)
 
 
 @users.route("/reset-password/<token>", methods=["GET", "POST"])
@@ -130,4 +130,4 @@ def reset_token(token):
         flash("Your password has been updated!", "success")
         return redirect(url_for("users.login"))
 
-    return render_template("reset_token.html", form=form)
+    return render_template("users/reset_token.html", form=form)

@@ -1,10 +1,17 @@
+import enum
 from datetime import datetime
 
 from flask_login import UserMixin
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text, func
+from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from main import db
+
+
+class Roles(enum.Enum):
+    ADMINISTRATOR = "administrator"
+    # EDITOR = "editor"
+    AUTHOR = "author"
 
 
 class User(db.Model, UserMixin):
@@ -17,11 +24,18 @@ class User(db.Model, UserMixin):
         String(20), nullable=False, default="default.png"
     )
     password: Mapped[str] = mapped_column(String(60))
-    is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
+    role: Mapped[Roles] = mapped_column(Enum(Roles), default=Roles.AUTHOR)
     posts: Mapped[list["Post"]] = relationship(back_populates="author")
+
+    @property
+    def is_admin(self):
+        return self.role == Roles.ADMINISTRATOR
 
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, username={self.username!r}, email={self.email!r})"
+
+    def __str__(self) -> str:
+        return self.username
 
 
 class Post(db.Model):
@@ -40,3 +54,6 @@ class Post(db.Model):
 
     def __repr__(self) -> str:
         return f"Post(id={self.id!r}, title={self.title!r}, date_posted={self.date_posted!r})"
+
+    def __str__(self) -> str:
+        return self.title

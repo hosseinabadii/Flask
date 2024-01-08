@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from flask import Flask
 from flask_login import LoginManager
 from flask_mail import Mail
@@ -6,6 +8,8 @@ from flask_wtf import CSRFProtect
 from sqlalchemy.orm import declarative_base
 
 from config import Config
+
+ROOT_PATH = Path(__file__).parent
 
 csrf = CSRFProtect()
 Base = declarative_base()
@@ -23,7 +27,7 @@ def load_user(user_id):
     return db.session.get(User, int(user_id))
 
 
-from admin.views import admin
+from admin.register import admin
 from errors.handlers import errors
 from main.views import main
 from posts.views import posts
@@ -43,9 +47,9 @@ def create_app():
     with app.app_context():
         db.create_all()
 
-    app.register_blueprint(main, url_prefix="/")
-    app.register_blueprint(users, url_prefix="/")
-    app.register_blueprint(posts, url_prefix="/post")
-    app.register_blueprint(errors, url_prefix="/error")
+    app.register_blueprint(main)
+    app.register_blueprint(errors)
+    app.register_blueprint(users)
+    app.register_blueprint(posts, url_prefix="/posts")
 
     return app

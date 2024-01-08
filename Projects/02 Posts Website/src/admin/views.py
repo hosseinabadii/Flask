@@ -1,14 +1,13 @@
 from flask import redirect, request, url_for
-from flask_admin import Admin, AdminIndexView
-from flask_admin.base import MenuLink
+from flask_admin import AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
 
-from main import db
-from main.models import Post, User
 
+class ProtectedAdminIndexView(AdminIndexView):
+    def is_visible(self):
+        return False
 
-class MyAdminIndexView(AdminIndexView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.is_admin
 
@@ -16,9 +15,6 @@ class MyAdminIndexView(AdminIndexView):
         if not current_user.is_authenticated:
             return redirect(url_for("users.login", next=request.url))
         return redirect(url_for("main.index"))
-
-
-admin = Admin(name="admin", index_view=MyAdminIndexView(), template_mode="bootstrap4")
 
 
 class BaseAdminView(ModelView):
@@ -37,27 +33,29 @@ class BaseAdminView(ModelView):
 
 
 class UserAdminView(BaseAdminView):
+    column_list = ["username", "email", "role"]
     column_searchable_list = ["username", "email"]
+    form_excluded_columns = ["password"]
 
 
 class PostAdminView(BaseAdminView):
-    column_list = (
+    column_list = [
         "title",
         "date_posted",
         "content",
         "is_public",
         "image_file",
-        "author_id",
         "author",
-    )
-    column_sortable_list = (
+        "author_id",
+    ]
+    column_sortable_list = [
         "title",
         "date_posted",
         "content",
         "is_public",
         "image_file",
         "author_id",
-    )
+    ]
     column_searchable_list = ["title", "author_id"]
     form_columns = ["title", "content", "is_public", "author"]
     form_ajax_refs = {
@@ -66,9 +64,3 @@ class PostAdminView(BaseAdminView):
             "page_size": 10,
         }
     }
-
-
-admin.add_view(UserAdminView(User, db.session))
-admin.add_view(PostAdminView(Post, db.session))
-admin.add_link(MenuLink(name="Website", endpoint="main.index"))
-admin.add_link(MenuLink(name="Logout", endpoint="users.logout"))

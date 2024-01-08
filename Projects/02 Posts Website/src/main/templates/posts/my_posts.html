@@ -4,24 +4,26 @@
 {% block content %}
 {% if posts %}
 {% for post in posts[::-1] %}
-{% if post.is_public %}
 <article class="d-flex align-items-center mb-3 p-2 border rounded">
   <div class="flex-grow-1 ms-3 me-3">
     <div class="pb-2 mb-2 border-bottom">
+      {% if post.is_public %}
       <span class="badge bg-success text-white me-2">Public</span>
+      {% else %}
+      <span class="badge bg-dark text-white me-2">Private</span>
+      {% endif %}
       <small class="text-muted">{{ post.date_posted.strftime("%Y-%m-%d") }}</small>
     </div>
     <h2><a class="text-dark-emphasis text-decoration-none" href="{{ url_for('posts.post', post_id=post.id) }}">{{
         post.title }}</a></h2>
-    <p>{{ post.content }}</p>
+    <p class="">{{ post.content }}</p>
   </div>
   <div class="flex-shrink-0 m-1">
-    <img class="article-img" src="{{ url_for('posts.static', filename='thumbnails/' + post.image_file) }}">
+    <img class="article-img" src="{{ url_for('static', filename='posts/thumbnails/' + post.image_file) }}">
   </div>
 </article>
-{% endif%}
 {% endfor %}
 {% else %}
-<h2>This user does not have any public posts.</h2>
+<h2>You don't have any posts yet. Add a new post.</h2>
 {% endif %}
 {% endblock content %}
