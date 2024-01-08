@@ -13,6 +13,13 @@ Welcome to the repository for My Flask Blog Project, a dynamic blogging platform
 - **Personal Post Management**: Users can manage their own posts - edit or delete them.
 - **Database**: SQLite with the support of Flask-SQLAlchemy and SQLAlchemy.
 
+## Getting Started
+
+Before you begin, ensure you have the following installed:
+
+- Python 3.10+
+- pip (Python package installer)
+
 ## Installation
 
 To set up and run the blog platform locally, follow these steps:
